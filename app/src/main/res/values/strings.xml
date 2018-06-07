@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">platzigram</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_reference">referenceActivity</string>
+    <string name="hint_username">Nombre de usuario</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="login_button">Login</string>
+    <string name="dont_have_account">No tienes cuenta?, </string>
+    <string name="create_here">Crea una aqui</string>
+    <string name="hint_email">Correo</string>
+    <string name="hint_name">Nombre</string>
+    <string name="hint_user">Usuario</string>
+    <string name="hint_confirm_password">Confirmar Contraseña</string>
+    <string name="create_account_button">Unete</string>
+    <string name="toolbar_tittle_createAccount">Crear Cuenta</string>
+    <string name="username_card">Uriel Ramirez</string>
+    <string name="first_word_card">Hace</string>
+    <string name="time_card">4 dias</string>
+    <string name="like_number_card">10 Me Gusta</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_search">Buscar</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_profile">Yo</string>
+    <string name="secondWord_detail">Me Gusta</string>
+    <string name="title_image_detail">\"Todo copas en la playa\"</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent facilisis non odio nec iaculis. Maecenas vehicula fringilla lacus, at finibus odio posuere a. Integer nec feugiat neque. Vestibulum tristique, felis a fermentum commodo, ipsum mauris elementum felis, a accumsan nulla enim id ligula. Nam feugiat, elit laoreet congue pharetra, elit orci malesuada felis, id dignissim nibh sem sit amet augue. Nunc tincidunt velit vitae felis tempus lobortis. Curabitur condimentum quis sem id sodales. Nullam rhoncus erat velit, at tempus arcu mattis vel. Quisque pharetra augue consectetur blandit rutrum. Cras dignissim odio in orci efficitur, vel vulputate neque faucibus. Ut non ornare nisi. Cras nec consequat sem. Proin faucibus, quam quis fermentum viverra, tortor nibh eleifend libero, quis gravida dolor lacus in risus. Sed velit arcu, dignissim a turpis id, suscipit ornare ex. Interdum et malesuada fames ac ante ipsum primis in faucibus.</string>
+    <string name="transitionName_picture">transitionnamepicture</string>
+</resources>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.john.platzigram.activities.PictureDetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/appbarLayout_height"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/image_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/banana"
+                app:layout_collapseMode="parallax"
+
+                android:transitionName="@string/transitionName_picture"/>
+
+            <!--android:fitsSystemWindows="true"-->
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/padding_horizontal_login">
+
+            <TextView
+                android:id="@+id/usernameDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize_username_detail"
+                android:text="@string/username_card"
+                android:paddingLeft="@dimen/padding_horizontal_login"
+                android:paddingRight="@dimen/padding_horizontal_login"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding_horizontal_login"
+                android:paddingLeft="@dimen/padding_horizontal_login"
+                android:paddingHorizontal="@dimen/padding_horizontal_login">
+
+                <TextView
+                    android:id="@+id/likeNumberDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/textSize_likeNumber_detail"
+                    android:text="10"/>
+
+                <TextView
+                    android:id="@+id/secondWordDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/textSize_likeNumber_detail"
+                    android:text="@string/secondWord_detail"
+                    android:layout_marginLeft="@dimen/marginLeft_secondWord_detail"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_divider"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/titleImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize_likeNumber_detail"
+                android:text="@string/title_image_detail"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:paddingTop="@dimen/paddingTop_tittleImage_detail"/>
+
+            <TextView
+                android:id="@+id/textContentImageDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize_likeNumber_detail"
+                android:text="@string/lorem"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="@dimen/paddingTop_tittleImage_detail"
+                android:paddingLeft="@dimen/padding_horizontal_textContentDetail"
+                android:paddingRight="@dimen/padding_horizontal_textContentDetail"/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/empty_heart"
+        app:layout_anchor="@+id/collapsingToolbar"
+        app:layout_anchorGravity="bottom|end"
+        android:clickable="true"/>
+
+        <!--IF WE WANT TO DISAPPEAR THE FLOATING BUTTON WHEN THE APPBAR IS COLLPASED-->
+        <!--app:layout_anchor="@+id/appBar"-->
+
+</android.support.design.widget.CoordinatorLayout>
