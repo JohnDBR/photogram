@@ -10,4 +10,5 @@
     app:bb_tabXmlResource="@xml/bottombar_tabs"
     app:bb_inActiveTabColor="@android:color/white"
     app:bb_activeTabColor="@android:color/black"
-    android:background="@color/colorPrimary" />
+    android:background="@color/colorPrimary"
+    app:bb_tabletMode="true"/>

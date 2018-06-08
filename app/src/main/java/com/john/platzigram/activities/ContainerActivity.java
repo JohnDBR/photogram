@@ -1,6 +1,7 @@
 package com.john.platzigram.activities;
 
 import android.app.FragmentTransaction;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import com.john.platzigram.R;
 import com.john.platzigram.fragments.HomeFragment;
 import com.john.platzigram.fragments.ProfileFragment;
 import com.john.platzigram.fragments.SearchFragment;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 public class ContainerActivity extends AppCompatActivity {
 
@@ -20,30 +23,29 @@ public class ContainerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
 
-        BottomNavigationView bottomBar = (BottomNavigationView)
+        BottomBar bottomBar = (BottomBar)
                 findViewById(R.id.bottomBar);
 
-        bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+            public void onTabSelected(@IdRes int tabId) {
+                switch (tabId) {
                     case R.id.search:
                         SearchFragment searchFragment = new SearchFragment();
                         setFragment(searchFragment);
-                        return true;
+                        break;
                     case R.id.home:
                         HomeFragment homeFragment = new HomeFragment();
                         setFragment(homeFragment);
-                        return true;
+                        break;
                     case R.id.me:
                         ProfileFragment profileFragment = new ProfileFragment();
                         setFragment(profileFragment);
-                        return true;
+                        break;
                 }
-                return false;
             }
         });
-        bottomBar.setSelectedItemId(R.id.home);
+        bottomBar.setDefaultTab(R.id.home);
     }
 
     private void setFragment(Fragment fragment){
