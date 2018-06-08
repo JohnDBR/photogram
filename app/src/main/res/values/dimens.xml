@@ -10,7 +10,7 @@
     <dimen name="first_word_textSize_card">15dp</dimen>
     <dimen name="time_card_marginLeft">5dp</dimen>
     <dimen name="like_marginTop_card">10dp</dimen>
-    <dimen name="bottomBar_height">70dp</dimen>
+    <dimen name="bottomBar_height">50dp</dimen>
     <dimen name="appbarLayout_height">256dp</dimen>
     <dimen name="textSize_username_detail">25dp</dimen>
     <dimen name="textSize_likeNumber_detail">15dp</dimen>
