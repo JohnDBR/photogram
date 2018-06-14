@@ -13,15 +13,18 @@ import com.john.platzigram.fragments.HomeFragment;
 import com.john.platzigram.fragments.ProfileFragment;
 import com.john.platzigram.fragments.SearchFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ContainerActivity extends AppCompatActivity {
+
+    @BindView(R.id.bottomBar) BottomNavigationView bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
-
-        BottomNavigationView bottomBar = (BottomNavigationView)
-                findViewById(R.id.bottomBar);
+        ButterKnife.bind(this);
 
         bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -17,11 +17,16 @@ import com.john.platzigram.models.Picture;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.pictureProfileRecycler) RecyclerView picturesRecycler;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -33,9 +38,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        showToolbar("",false, view);
-
-        RecyclerView picturesRecycler = (RecyclerView) view.findViewById(R.id.pictureProfileRecycler);
+        ButterKnife.bind(this, view);
+        showToolbar("",false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager((getContext()));
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -58,8 +62,7 @@ public class ProfileFragment extends Fragment {
         return pictures;
     }
 
-    public void showToolbar(String tittle, boolean upButton, View view){
-        Toolbar toolbar = (Toolbar)  view.findViewById(R.id.toolbar);
+    public void showToolbar(String tittle, boolean upButton){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(tittle);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);

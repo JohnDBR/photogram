@@ -21,6 +21,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by John on 6/5/2018.
  */
@@ -83,19 +86,15 @@ public class PictureAdapterRecyclerView extends RecyclerView.Adapter<PictureAdap
 
     public class PictureViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView pictureCard;
-        private TextView usernameCard;
-        private TextView timeCard;
-        private TextView likeNumberCard;
+        @BindView(R.id.picture) ImageView pictureCard;
+        @BindView(R.id.userNameCard) TextView usernameCard;
+        @BindView(R.id.timeCard) TextView timeCard;
+        @BindView(R.id.likeNumberCard) TextView likeNumberCard;
 
         public PictureViewHolder(View itemView) {
             super(itemView);
 
-            pictureCard = (ImageView) itemView.findViewById(R.id.picture);
-            usernameCard = (TextView) itemView.findViewById(R.id.userNameCard);
-            timeCard = (TextView) itemView.findViewById(R.id.timeCard);
-            likeNumberCard = (TextView) itemView.findViewById(R.id.likeNumberCard);
-
+            ButterKnife.bind(this, itemView);
         }
     }
 }

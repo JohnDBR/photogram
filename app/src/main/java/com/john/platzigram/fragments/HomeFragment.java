@@ -17,11 +17,16 @@ import com.john.platzigram.models.Picture;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.pictureRecycler) RecyclerView picturesRecycler;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -33,8 +38,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        showToolbar(getResources().getString(R.string.tab_home), false, view);
-        RecyclerView picturesRecycler = (RecyclerView) view.findViewById(R.id.pictureRecycler);
+        ButterKnife.bind(this, view);
+        showToolbar(getResources().getString(R.string.tab_home), false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager((getContext()));
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -57,8 +62,7 @@ public class HomeFragment extends Fragment {
         return pictures;
     }
 
-    public void showToolbar(String tittle, boolean upButton, View view){
-        Toolbar toolbar = (Toolbar)  view.findViewById(R.id.toolbar);
+    public void showToolbar(String tittle, boolean upButton){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(tittle);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);

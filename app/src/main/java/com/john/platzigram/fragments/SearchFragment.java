@@ -16,11 +16,15 @@ import com.john.platzigram.models.Picture;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SearchFragment extends Fragment {
 
+    @BindView(R.id.pictureRecycler) RecyclerView picturesRecycler;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -32,7 +36,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        RecyclerView picturesRecycler = (RecyclerView) view.findViewById(R.id.pictureRecycler);
+        ButterKnife.bind(this, view);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager((getContext()), 2);
 //        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
