@@ -2,12 +2,14 @@ package com.john.platzigram.fragments;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,6 +29,7 @@ public class HomeFragment extends Fragment {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.pictureRecycler) RecyclerView picturesRecycler;
+    @BindView(R.id.fab) FloatingActionButton fab;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -50,6 +53,17 @@ public class HomeFragment extends Fragment {
                 new PictureAdapterRecyclerView(buildPictures(), R.layout.cardview_picture, getActivity());
 
         picturesRecycler.setAdapter(pictureAdapterRecyclerView);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewPostFragment newPostFragment = new NewPostFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, newPostFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         return view;
     }
