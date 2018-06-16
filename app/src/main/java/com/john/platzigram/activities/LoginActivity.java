@@ -16,6 +16,9 @@ import com.john.platzigram.R;
 //THREADING AVANZADO RX JAVA
 //ANDROID ARSENAL TO SEARCH HEAVY STUFF
 
+//SEARCH VIEW ANDROID WIDGET OVER LIBRARIES?
+//BOTTOM BAR ANDROID WIDGET OVER LIBRARIES?
+
 public class LoginActivity extends AppCompatActivity {
 
     @Override

@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
                 NewPostFragment newPostFragment = new NewPostFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, newPostFragment)
-                        .addToBackStack(null)
+//                        .addToBackStack(null)
                         .commit();
             }
         });
