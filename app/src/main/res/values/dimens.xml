@@ -32,4 +32,5 @@
     <dimen name="marginTop_targetY_username_toolbar_profile">-5dp</dimen>
     <dimen name="targetX_circleImage_toolbar">20dp</dimen>
     <dimen name="targetY_circleImage_toolbar">2dp</dimen>
+    <dimen name="marginTop_tittle_newPost">15dp</dimen>
 </resources>

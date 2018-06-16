@@ -3,8 +3,8 @@
     package="com.john.platzigram">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-feature android:name="android.hardware.camera2" android:required="false" />-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- <uses-feature android:name="android.hardware.camera2" android:required="false" /> -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,15 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--<provider-->
-            <!--android:authorities="com.john.platzigram"-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:exported="false"-->
-            <!--android:grantUriPermissions="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/file_paths"></meta-data>-->
-        <!--</provider>-->
+        <!-- <provider -->
+        <!-- android:authorities="com.john.platzigram" -->
+        <!-- android:name="android.support.v4.content.FileProvider" -->
+        <!-- android:exported="false" -->
+        <!-- android:grantUriPermissions="true"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+        <!-- android:resource="@xml/file_paths"></meta-data> -->
+        <!-- </provider> -->
 
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
@@ -43,8 +43,15 @@
             android:label="@string/title_activity_reference"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ContainerActivity" />
-        <activity android:name=".activities.PictureDetailActivity"
-            android:parentActivityName=".activities.ContainerActivity">
+        <activity
+            android:name=".activities.PictureDetailActivity"
+            android:parentActivityName=".activities.PictureDetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVIY"
+                android:value=".activities.ContainerActivity" />
+        </activity>
+        <activity android:name=".activities.NewPostActivity"
+            android:parentActivityName=".activities.NewPostActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVIY"
                 android:value=".activities.ContainerActivity" />

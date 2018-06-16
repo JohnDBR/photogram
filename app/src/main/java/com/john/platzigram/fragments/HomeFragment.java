@@ -1,19 +1,25 @@
 package com.john.platzigram.fragments;
 
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.view.LayoutInflater;
 import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.john.platzigram.R;
+import com.john.platzigram.activities.NewPostActivity;
+import com.john.platzigram.activities.PictureDetailActivity;
 import com.john.platzigram.adapters.PictureAdapterRecyclerView;
 import com.john.platzigram.models.Picture;
 
@@ -57,11 +63,29 @@ public class HomeFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewPostFragment newPostFragment = new NewPostFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, newPostFragment)
-//                        .addToBackStack(null)
-                        .commit();
+//                NewPostFragment newPostFragment = new NewPostFragment();
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.container, newPostFragment)
+////                        .addToBackStack(null)
+//                        .commit();
+
+//                startActivity(new Intent(getActivity(), NewPostActivity.class));
+
+                Intent intent = new Intent(getActivity(), NewPostActivity.class);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    Explode explode = new Explode();
+                    explode.setDuration(1000);
+                    getActivity().getWindow().setExitTransition(explode);
+                    getActivity().startActivity(intent,
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    getActivity(),
+                                    fab,
+                                    getActivity().getString(R.string.transitionName_picture)
+                            ).toBundle());
+                } else {
+                    getActivity().startActivity(intent);
+                }
             }
         });
 
