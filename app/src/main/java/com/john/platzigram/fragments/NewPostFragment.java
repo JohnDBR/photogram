@@ -4,6 +4,7 @@ package com.john.platzigram.fragments;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,8 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,9 +43,6 @@ public class NewPostFragment extends Fragment {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.ivPicture) ImageView ivPicture;
     @BindView(R.id.btnTakePicture) Button btnTakePicture;
-
-    static final int REQUEST_IMAGE_CAPUTRE = 1;
-    String mCurrentPhotoPath;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -53,12 +54,12 @@ public class NewPostFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_post, container, false);
         ButterKnife.bind(this, view);
-        showToolbar("", false);
+        showToolbar("", true);
 
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePicture();
+                pictureHandler();
             }
         });
 
@@ -73,60 +74,30 @@ public class NewPostFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPUTRE && resultCode == getActivity().RESULT_OK){
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            ivPicture.setImageBitmap(imageBitmap);
-            Picasso.get().load(mCurrentPhotoPath).into(ivPicture);
-            addPictureToGallery();
-            Toast.makeText(getActivity(), mCurrentPhotoPath, Toast.LENGTH_LONG).show();
-        }
-    }
+        super.onActivityResult(requestCode, resultCode, data);
 
-    private void takePicture() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null){
-            File photoFile = null;
-            try {
-                photoFile = createtImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                Toast.makeText(getActivity(), "Image Error", Toast.LENGTH_LONG).show();
             }
-            if (photoFile != null){
-                Uri photoURI = FileProvider.getUriForFile(
-                        getActivity(),
-                        "com.john.platzigram",
-                        photoFile
-                );
 
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            @Override
+            public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
+                //Handle the images
+//                Picasso.get().load(imageFile).into(ivPicture);
+                Bitmap image = BitmapFactory.decodeFile(imageFile.getPath());
+                Log.d("tag", imageFile.getPath());
+//                Bitmap img = Bitmap.createScaledBitmap(image, 400, 400, true);
 
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPUTRE);
+                ivPicture.setImageBitmap(image);
+
             }
-        }
+        });
     }
 
-    private File createtImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-
-        return image;
+    public void pictureHandler(){
+        EasyImage.openChooserWithGallery(this, "Selecciona una imagen", 0);
     }
 
-    private void addPictureToGallery(){
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File newFile = new File(mCurrentPhotoPath);
-
-        Uri contentUri = Uri.fromFile(newFile);
-        mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
-    }
 }
