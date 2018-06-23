@@ -42,6 +42,14 @@
                 android:orientation="vertical"
                 android:padding="@dimen/padding_horizontal_login">
 
+                <TextView
+                    android:id="@+id/errors_login"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:layout_marginBottom="10dp"/>
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,6 +106,12 @@
                         android:textSize="@dimen/textSize_dontHaveAccount"
                         android:layout_toRightOf="@id/dontHaveAccount"
                         android:onClick="goCreateAccount"/>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar_login"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
                 </RelativeLayout>
 

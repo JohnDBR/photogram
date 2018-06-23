@@ -1,24 +1,46 @@
 package com.john.platzigram.fragments;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.john.platzigram.R;
+import com.john.platzigram.activities.ContainerActivity;
+import com.john.platzigram.activities.LoginActivity;
 import com.john.platzigram.adapters.PictureAdapterRecyclerView;
 import com.john.platzigram.models.Picture;
+import com.john.platzigram.network.RetrofitClientInstance;
+import com.john.platzigram.services.AuthenticationService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +49,12 @@ public class ProfileFragment extends Fragment {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.pictureProfileRecycler) RecyclerView picturesRecycler;
+    @BindView(R.id.collapsingToolbarProfile) CollapsingToolbarLayout ctl;
+    @BindView(R.id.progressBar_profile_fragment) ProgressBar progressBar;
+
+
+    SharedPreferences sharedPreferences;
+    AppCompatActivity context;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -40,6 +68,9 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
         showToolbar("",false);
+
+        context = (AppCompatActivity) getActivity();
+        sharedPreferences = context.getSharedPreferences("user_pref", context.getApplicationContext().MODE_PRIVATE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager((getContext()));
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -66,6 +97,65 @@ public class ProfileFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(tittle);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);
+        setHasOptionsMenu(true);
+        ctl.setTitle("Uriel Ramirez");
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.profile_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.logout:
+                beforeMainAction();
+                AuthenticationService service = RetrofitClientInstance.getRetrofitInstance().create(AuthenticationService.class);
+                String token = sharedPreferences.getString("token", null);
+                if(token != null && !token.isEmpty()){
+                    Call<ResponseBody> call = service.logout("Token token=".concat(token));
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Toast.makeText(context.getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                            if (response.isSuccessful()) { // .code() == 200
+                                try {
+                                    JSONObject responseJson = new JSONObject(new JSONTokener(response.body().string()));
+                                    sharedPreferences.edit().clear().commit();
+                                    afterMainAction();
+                                    Intent intent = new Intent(context.getApplicationContext(), LoginActivity.class);
+                                    startActivity(intent);
+                                    context.finish();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                afterMainAction();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            afterMainAction();
+                            Toast.makeText(context.getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void beforeMainAction(){
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void afterMainAction(){
+        progressBar.setVisibility(View.GONE);
+    }
 }

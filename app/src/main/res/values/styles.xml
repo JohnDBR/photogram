@@ -15,7 +15,12 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">-4dp</item>
+        <item name="android:textColor">@android:color/white</item>
+     </style>
 
     <style name="RaisedButtonDark" parent="Theme.AppCompat.Light">
         <item name="android:colorButtonNormal">@color/colorPrimaryDark</item>
@@ -31,22 +36,35 @@
         <item name="android:textColor">@color/editTextColorBlack</item>
     </style>
 
-    <style name="EditTextWhite" parent="TextAppearance.AppCompat">
+    <style name="EditTextWhite" parent="Theme.Design">
         <item name="android:textColorHint">@color/editTextColorWhite</item>
         <item name="android:textSize">@dimen/editText_textSize_login</item>
         <item name="android:textColorPrimary">@color/editTextColorWhite</item>
         <item name="colorAccent">@color/editTextColorWhite</item>
         <item name="colorControlNormal">@color/editTextColorWhite</item>
         <item name="colorControlActivated">@color/editTextColorWhite</item>
+        <item name="textColorError">?attr/colorError</item>
     </style>
 
-    <style name="EditTextBlack" parent="TextAppearance.AppCompat">
+    <style name="EditTextBlack" parent="Theme.Design">
         <item name="android:textColorHint">@color/editTextColorBlack</item>
         <item name="android:textSize">@dimen/editText_textSize_login</item>
         <item name="android:textColorPrimary">@color/editTextColorBlack</item>
         <item name="colorAccent">@color/editTextColorBlack</item>
         <item name="colorControlNormal">@color/editTextColorBlack</item>
         <item name="colorControlActivated">@color/editTextColorBlack</item>
+        <item name="textColorError">?attr/colorError</item>
+    </style>
+
+    <style name="EditTextError" parent="Theme.Design">
+        <item name="colorAccent">@android:color/holo_red_dark</item>
+        <item name="colorControlNormal">@android:color/holo_red_dark</item>
+        <item name="colorControlActivated">@android:color/holo_red_dark</item>
+    </style>
+
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

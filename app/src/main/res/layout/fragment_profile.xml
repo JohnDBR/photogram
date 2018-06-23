@@ -19,37 +19,42 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-
-            app:statusBarScrim="@color/colorPrimary">
+            app:statusBarScrim="@color/colorPrimary"
+            app:expandedTitleMarginBottom="15dp"
+            app:collapsedTitleGravity="center_horizontal"
+            app:expandedTitleGravity="center_horizontal|bottom">
 
             <!--android:fitsSystemWindows="true"-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center|bottom"
-                android:paddingBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_gravity="center|bottom"-->
+                <!--android:paddingBottom="8dp"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:gravity="center"-->
+                <!--app:layout_collapseMode="pin">-->
 
-                <TextView
-                    android:id="@+id/usernameProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/username_card"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/textSize_username_profile"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/usernameProfile"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/username_card"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="@dimen/textSize_username_profile"/>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:layout_collapseMode="pin"
+                />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -76,6 +81,14 @@
         app:targetY="@dimen/targetY_circleImage_toolbar"
         app:targetWidth="@dimen/width_circleImage_toolbar"
         app:targetHeight="@dimen/width_circleImage_toolbar"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar_profile_fragment"
+        android:visibility="gone"
+        android:elevation="@dimen/elevation_circleImage_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
     <!--THIS TEXTVIEW ISN'T IMPORTANT BECAUSE WE ALREADY HAVE A TEXT VIEW IN THE COLLAPSING BAR LAYOUT-->
     <!--I DON'T DELETE IT BECAUSE IT HAS A COOL ANIMATION-->
