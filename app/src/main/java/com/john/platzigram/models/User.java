@@ -2,6 +2,8 @@ package com.john.platzigram.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.File;
+
 /**
  * Created by John on 6/18/2018.
  */
@@ -18,14 +20,26 @@ public class User {
     private String username;
     @SerializedName("password")
     private String password;
+    @SerializedName("picture")
+    private Picture picture;
+//    private File image;
 
-    public User(Integer id, String email, String name, String username, String password) {
+    public User(Integer id, String email, String name, String username, String password, Picture picture) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.username = username;
         this.password = password;
+        this.picture = picture;
     }
+
+//    public User(String email, String name, String username, String password, File image) {
+//        this.email = email;
+//        this.name = name;
+//        this.username = username;
+//        this.password = password;
+//        this.image = image;
+//    }
 
     public User(String email, String name, String username, String password) {
         this.email = email;
@@ -38,6 +52,10 @@ public class User {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -64,11 +82,27 @@ public class User {
         this.username = username;
     }
 
-    public String getPasword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPasword(String pasword) {
-        this.password = pasword;
+    public void setPassword(String password) {
+        this.password = password;
     }
+
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
+    }
+
+//    public File getImage() {
+//        return image;
+//    }
+//
+//    public void setImage(File image) {
+//        this.image = image;
+//    }
 }

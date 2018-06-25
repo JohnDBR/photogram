@@ -1,53 +1,60 @@
 package com.john.platzigram.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- * Created by John on 6/5/2018.
+ * Created by John on 6/25/2018.
  */
 
 public class Picture {
-    private String picture;
-    private String username;
-    private String time;
-    private String like_number = "0";
 
-    public Picture(String picture, String username, String time, String like_number) {
-        this.picture = picture;
-        this.username = username;
-        this.time = time;
-        this.like_number = like_number;
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("url")
+    private String url;
+    @SerializedName("created_at")
+    private String created_at;
+
+    public Picture(Integer id, String name, String url, String created_at) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+        this.created_at = created_at;
     }
 
     //GETTERS SETTERS...
 
-    public String getPicture() {
-        return picture;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTime() {
-        return time;
+    public String getUrl() {
+        return url;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public String getLike_number() {
-        return like_number;
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public void setLike_number(String like_number) {
-        this.like_number = like_number;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }

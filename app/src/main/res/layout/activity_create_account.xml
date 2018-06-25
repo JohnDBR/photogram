@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:configChanges="orientation|screenSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.john.platzigram.activities.CreateAccountActivity">
 
     <include layout="@layout/actionbar_toolbar"></include>
@@ -20,6 +21,23 @@
             android:layout_height="match_parent"
             android:padding="@dimen/padding_horizontal_login"
             android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivPicture_createAccount"
+                android:layout_width="match_parent"
+                android:layout_height="256dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/banana"/>
+
+            <Button
+                android:id="@+id/btnTakePicture_createAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/RaisedButtonDark"
+                android:onClick="pictureHandler"
+                android:text="@string/take_select_picture"
+                android:drawableLeft="@drawable/camera"
+                android:layout_marginHorizontal="@dimen/padding_horizontal_login"/>
 
             <TextView
                 android:id="@+id/errors_create_account"

@@ -1,6 +1,9 @@
 package com.john.platzigram.activities;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,10 +23,19 @@ import com.john.platzigram.R;
 import com.john.platzigram.models.User;
 import com.john.platzigram.network.RetrofitClientInstance;
 import com.john.platzigram.services.UserService;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.net.URLConnection;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +57,9 @@ public class CreateAccountActivity extends AppCompatActivity {
     @BindView(R.id.email_layout) TextInputLayout lEmail;
     @BindView(R.id.user_layout) TextInputLayout lUsername;
     @BindView(R.id.name_layout) TextInputLayout lName;
+    @BindView(R.id.ivPicture_createAccount) ImageView ivPicture;
+
+    File imageSelected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,28 +79,56 @@ public class CreateAccountActivity extends AppCompatActivity {
         beforeMainAction();
 
         if (validateFields()) {
-                User user = new User(tEmail.getText().toString(), tName.getText().toString(), tUsername.getText().toString(), tPassword.getText().toString());
+            User user = null;
+//            if  (imageSelected != null) {
+//                user = new User(tEmail.getText().toString(), tName.getText().toString(), tUsername.getText().toString(), tPassword.getText().toString(), imageSelected);
+//            } else {
+//                user = new User(tEmail.getText().toString(), tName.getText().toString(), tUsername.getText().toString(), tPassword.getText().toString());
+//            }
+            UserService service = RetrofitClientInstance.getRetrofitInstance().create(UserService.class);
 
-                UserService service = RetrofitClientInstance.getRetrofitInstance().create(UserService.class);
-                Call<User> call = service.createUser(user);
-                call.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
-                        if (response.isSuccessful()) { // .code() == 200
-                            Toast.makeText(getApplicationContext(), "Fuiste redirigido al login, inicia con tu nueva cuenta", Toast.LENGTH_LONG).show();
-                            finish();
-                        } else {
-                            afterMainAction();
-                        }
-                    }
+//            String mimeType = URLConnection.guessContentTypeFromName(imageSelected.getName());
+//            MediaType mt = MediaType.parse(mimeType);
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageSelected);
+            MultipartBody.Part image =
+                    MultipartBody.Part.createFormData("image", imageSelected.getName(), requestFile);
+
+            RequestBody email =
+                    RequestBody.create(
+                            MediaType.parse("multipart/form-data"), tEmail.getText().toString());
+
+            RequestBody name =
+                    RequestBody.create(
+                            MediaType.parse("multipart/form-data"), tName.getText().toString());
+
+            RequestBody username =
+                    RequestBody.create(
+                            MediaType.parse("multipart/form-data"), tUsername.getText().toString());
+
+            RequestBody password =
+                    RequestBody.create(
+                            MediaType.parse("multipart/form-data"), tPassword.getText().toString());
+
+            Call<User> call = service.createUser(email, username, name, password, image);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                    if (response.isSuccessful()) { // .code() == 200
+                        Toast.makeText(getApplicationContext(), "Fuiste redirigido al login, inicia con tu nueva cuenta", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
                         afterMainAction();
-                        Toast.makeText(getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    afterMainAction();
+                    Toast.makeText(getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
             afterMainAction();
         }
@@ -161,6 +205,42 @@ public class CreateAccountActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         bRegister.setEnabled(true);
         bRegister.setClickable(true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                Toast.makeText(getApplicationContext(), "Image Error", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
+                //Handle the images
+
+                imageSelected = imageFile;
+                setImage(imageSelected);
+            }
+        });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (imageSelected != null){
+            setImage(imageSelected);
+        }
+    }
+
+    public void pictureHandler(View view){
+        EasyImage.openChooserWithGallery(this, "Selecciona una imagen", 0);
+    }
+
+    public void setImage(File imageFile){
+        Picasso.get().load(imageFile).into(ivPicture);
     }
 
 }
