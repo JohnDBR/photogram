@@ -51,13 +51,20 @@
                 android:name="android.support.PARENT_ACTIVIY"
                 android:value=".activities.ContainerActivity" />
         </activity>
-        <activity android:name=".activities.NewPostActivity"
+        <activity
+            android:name=".activities.NewPostActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".activities.NewPostActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVIY"
                 android:value=".activities.ContainerActivity" />
         </activity>
+        <activity android:name=".activities.EditAccountActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".activities.EditAccountActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVIY"
+                android:value=".activities.ContainerActivity" />></activity>
     </application>
 
 </manifest>

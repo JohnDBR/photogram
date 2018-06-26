@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -37,8 +38,10 @@ public interface UserService {
             @Part("password") RequestBody password,
             @Part MultipartBody.Part file);
 
+    @Multipart
     @PUT("/users/{id}")
     Call<User> updateUser(
+            @Header("Authorization") String token,
             @Path("id") int id,
             @Part("email") RequestBody email,
             @Part("username") RequestBody username,
@@ -47,5 +50,5 @@ public interface UserService {
             @Part MultipartBody.Part file);
 
     @DELETE("/users/{id}")
-    Call<User> deleteUser(@Path("id") int id);
+    Call<User> deleteUser(@Header("Authorization") String token, @Path("id") int id);
 }

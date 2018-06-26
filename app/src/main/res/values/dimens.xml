@@ -33,4 +33,5 @@
     <dimen name="targetX_circleImage_toolbar">20dp</dimen>
     <dimen name="targetY_circleImage_toolbar">2dp</dimen>
     <dimen name="marginTop_tittle_newPost">15dp</dimen>
+    <dimen name="error_marginTop">15dp</dimen>
 </resources>

@@ -13,6 +13,11 @@
            android:title="@string/tab_logout"
            android:icon="@drawable/logout"
            app:showAsAction="never"></item>
+            <item
+                android:id="@+id/editAccount"
+                android:title="@string/tab_edit"
+                android:icon="@drawable/edit"
+                app:showAsAction="never"></item>
         </menu>
   </item>
 </menu>

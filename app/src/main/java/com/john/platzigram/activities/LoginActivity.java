@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                             afterMainAction();
                             Intent intent = new Intent(getApplicationContext(), ContainerActivity.class);
                             startActivity(intent);
+                            finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (IOException e) {

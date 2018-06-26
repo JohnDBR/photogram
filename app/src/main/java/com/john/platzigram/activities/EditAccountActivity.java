@@ -1,15 +1,15 @@
 package com.john.platzigram.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -22,11 +22,14 @@ import android.widget.Toast;
 import com.john.platzigram.R;
 import com.john.platzigram.models.User;
 import com.john.platzigram.network.RetrofitClientInstance;
+import com.john.platzigram.services.AuthenticationService;
 import com.john.platzigram.services.UserService;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.net.URLConnection;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -40,33 +43,47 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class EditAccountActivity extends AppCompatActivity {
 
-    @BindString(R.string.toolbar_tittle_createAccount) String toolbarTittle;
+    @BindString(R.string.toolbar_tittle_editAccount) String toolbarTittle;
+    @BindString(R.string.edit_account_button) String mainButtonText;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.email) TextInputEditText tEmail;
-    @BindView(R.id.name) TextInputEditText tName;
-    @BindView(R.id.user) TextInputEditText tUsername;
-    @BindView(R.id.password_createAccount) TextInputEditText tPassword;
-    @BindView(R.id.confirm_password) TextInputEditText tConfirmPassword;
-    @BindView(R.id.errors_create_account) TextView tErrors;
-    @BindView(R.id.joinUs) Button bRegister;
-    @BindView(R.id.progressBar_create_account) ProgressBar progressBar;
-    @BindView(R.id.confirm_password_layout) TextInputLayout lConfirmPassword;
-    @BindView(R.id.password_createAccount_layout) TextInputLayout lPassword;
-    @BindView(R.id.email_layout) TextInputLayout lEmail;
-    @BindView(R.id.user_layout) TextInputLayout lUsername;
-    @BindView(R.id.name_layout) TextInputLayout lName;
-    @BindView(R.id.ivPicture_createAccount) ImageView ivPicture;
+    @BindView(R.id.email_edit) TextInputEditText tEmail;
+    @BindView(R.id.name_edit) TextInputEditText tName;
+    @BindView(R.id.user_edit) TextInputEditText tUsername;
+    @BindView(R.id.password_editAccount) TextInputEditText tPassword;
+    @BindView(R.id.confirm_edit_password) TextInputEditText tConfirmPassword;
+    @BindView(R.id.edit) Button bEdit;
+    @BindView(R.id.progressBar_edit_account) ProgressBar progressBar;
+    @BindView(R.id.confirm_password_edit_layout) TextInputLayout lConfirmPassword;
+    @BindView(R.id.password_editAccount_layout) TextInputLayout lPassword;
+    @BindView(R.id.email_edit_layout) TextInputLayout lEmail;
+    @BindView(R.id.user_edit_layout) TextInputLayout lUsername;
+    @BindView(R.id.name_edit_layout) TextInputLayout lName;
+    @BindView(R.id.ivPicture_editAccount) ImageView ivPicture;
+    @BindView(R.id.errors_edit_account) TextView tErrors;
 
     File imageSelected = null;
+    User currentUser = null;
+
+    SharedPreferences sharedPreferences;
+
+    UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
+        setContentView(R.layout.activity_edit_account);
         ButterKnife.bind(this);
         showToolbar(toolbarTittle, true);
+
+        bEdit.setText(mainButtonText);
+
+        userService = RetrofitClientInstance.getRetrofitInstance().create(UserService.class);
+
+        sharedPreferences = getSharedPreferences("user_pref", getApplicationContext().MODE_PRIVATE);
+
+        loadCurrentUserInfo();
     }
 
     public void showToolbar(String tittle, boolean upButton){
@@ -75,7 +92,38 @@ public class CreateAccountActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);
     }
 
-    public void register(View view){
+    public void loadCurrentUserInfo() {
+        String user_id = sharedPreferences.getString("user_id", null);
+        if (user_id != null && !user_id.isEmpty()) {
+            Call<User> call = userService.getUser(Integer.valueOf(user_id));
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_SHORT).show();
+                    if (response.isSuccessful()) { // .code() == 200
+                        currentUser = response.body();
+                        tEmail.setText(currentUser.getEmail());
+                        tName.setText(currentUser.getName());
+                        tUsername.setText(currentUser.getUsername());
+                        if (currentUser.getPicture() != null){
+                                Picasso.get().load(currentUser.getPicture().getUrl()).into(ivPicture);
+                        }
+                        afterMainAction();
+                    } else {
+                        afterMainAction();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    afterMainAction();
+                    Toast.makeText(getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    public void editAccount(View view){
         beforeMainAction();
 
         if (validateFields()) {
@@ -101,13 +149,22 @@ public class CreateAccountActivity extends AppCompatActivity {
                     RequestBody.create(
                             MediaType.parse("multipart/form-data"), tPassword.getText().toString());
 
-            Call<User> call = service.createUser(email, username, name, password, image);
+            String user_id = sharedPreferences.getString("user_id", null);
+            String token = sharedPreferences.getString("token", null);
+
+            Call<User> call = service.updateUser(
+                    "Token token=".concat(token),
+                    Integer.valueOf(user_id),
+                    email,
+                    username,
+                    name,
+                    password,
+                    image);
             call.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
-                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_SHORT).show();
                     if (response.isSuccessful()) { // .code() == 200
-                        Toast.makeText(getApplicationContext(), "Fuiste redirigido al login, inicia con tu nueva cuenta", Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         afterMainAction();
@@ -117,7 +174,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     afterMainAction();
-                    Toast.makeText(getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_LONG).show();
                 }
             });
         } else {
@@ -156,8 +213,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         if (
                 tEmail.getText().toString().isEmpty() ||
-                !android.util.Patterns.EMAIL_ADDRESS.matcher(tEmail.getText().toString()).matches()
-            ){
+                        !android.util.Patterns.EMAIL_ADDRESS.matcher(tEmail.getText().toString()).matches()
+                ){
 //            requestFocus(lEmail);
 //            lEmail.setErrorTextAppearance(R.style.error_appearance);
 //            lEmail.setErrorEnabled(true);
@@ -165,13 +222,41 @@ public class CreateAccountActivity extends AppCompatActivity {
             valid = false;
         }
 
-        return valid;
-    }
+        if (imageSelected == null){
+            if (currentUser.getPicture() != null) {
+                try {
+                    ivPicture.setDrawingCacheEnabled(true);
+                    ivPicture.buildDrawingCache();
+                    imageSelected = new File(getCacheDir(), "loadedImage.jpg"); // getAppContext().getFilesDir() getCacheDir()
+                    imageSelected.createNewFile();
 
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//                    FileOutputStream fos = new FileOutputStream(imageSelected);
+//                    Bitmap bm = ivPicture.getDrawingCache();
+//                    bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//                    fos.flush();
+//                    fos.close();
+
+                    //Convert bitmap to byte array
+                    Bitmap bitmap = ivPicture.getDrawingCache();
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                    byte[] bitmapdata = bos.toByteArray();
+
+                    //write the bytes in file
+                    FileOutputStream fos = new FileOutputStream(imageSelected);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                addError("Seleccione/Tome una foto");
+                valid = false;
+            }
         }
+
+        return valid;
     }
 
     public void addError(String newError){
@@ -188,14 +273,14 @@ public class CreateAccountActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         tErrors.setVisibility(View.GONE);
         tErrors.setText("");
-        bRegister.setEnabled(false);
-        bRegister.setClickable(false);
+        bEdit.setEnabled(false);
+        bEdit.setClickable(false);
     }
 
     public void afterMainAction(){
         progressBar.setVisibility(View.GONE);
-        bRegister.setEnabled(true);
-        bRegister.setClickable(true);
+        bEdit.setEnabled(true);
+        bEdit.setClickable(true);
     }
 
     @Override
@@ -232,6 +317,15 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     public void setImage(File imageFile){
         Picasso.get().load(imageFile).into(ivPicture);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -1,11 +1,13 @@
 package com.john.platzigram.fragments;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +24,12 @@ import android.widget.Toast;
 
 import com.john.platzigram.R;
 import com.john.platzigram.activities.ContainerActivity;
+import com.john.platzigram.activities.EditAccountActivity;
 import com.john.platzigram.activities.LoginActivity;
 import com.john.platzigram.adapters.PictureAdapterRecyclerView;
 import com.john.platzigram.models.Picture;
 import com.john.platzigram.models.Post;
+import com.john.platzigram.models.PostV;
 import com.john.platzigram.models.User;
 import com.john.platzigram.network.RetrofitClientInstance;
 import com.john.platzigram.services.AuthenticationService;
@@ -107,7 +111,7 @@ public class ProfileFragment extends Fragment {
             call.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
-                    Toast.makeText(context.getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context.getApplicationContext(), response.message(), Toast.LENGTH_SHORT).show();
                     if (response.isSuccessful()) { // .code() == 200
                         User currentUser = response.body();
                         ctl.setTitle(currentUser.getName());
@@ -123,17 +127,17 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     afterMainAction();
-                    Toast.makeText(context.getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_LONG).show();
                 }
             });
         }
     }
 
-    public ArrayList<Post> buildPictures(){
-        ArrayList<Post> pictures = new ArrayList<>();
-        pictures.add(new Post("http://res.cloudinary.com/johndbr/image/upload/v1525377721/c3e1473e7672485d864ff010ccb59633.jpg", "Uriel Ramirez", "4 dias", "3 Me Gusta"));
-        pictures.add(new Post("http://res.cloudinary.com/johndbr/image/upload/v1526056420/f381eb8f1cec4fec81e61677e1ade7f5.jpg", "Juan Pablo", "3 dias", "10 Me Gusta"));
-        pictures.add(new Post("http://res.cloudinary.com/johndbr/image/upload/v1525377544/985994d7924a43788275f2400f73c40d.jpg", "Anahi Salgado", "2 dias", "9 Me Gusta"));
+    public ArrayList<PostV> buildPictures(){
+        ArrayList<PostV> pictures = new ArrayList<>();
+        pictures.add(new PostV("http://res.cloudinary.com/johndbr/image/upload/v1525377721/c3e1473e7672485d864ff010ccb59633.jpg", "Uriel Ramirez", "4 dias", "3 Me Gusta"));
+        pictures.add(new PostV("http://res.cloudinary.com/johndbr/image/upload/v1526056420/f381eb8f1cec4fec81e61677e1ade7f5.jpg", "Juan Pablo", "3 dias", "10 Me Gusta"));
+        pictures.add(new PostV("http://res.cloudinary.com/johndbr/image/upload/v1525377544/985994d7924a43788275f2400f73c40d.jpg", "Anahi Salgado", "2 dias", "9 Me Gusta"));
         return pictures;
     }
 
@@ -155,43 +159,60 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.logout:
-                beforeMainAction();
-                String token = sharedPreferences.getString("token", null);
-                if(token != null && !token.isEmpty()){
-                    Call<ResponseBody> call = authService.logout("Token token=".concat(token));
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Toast.makeText(context.getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
-                            if (response.isSuccessful()) { // .code() == 200
-                                try {
-                                    JSONObject responseJson = new JSONObject(new JSONTokener(response.body().string()));
-                                    sharedPreferences.edit().clear().commit();
-                                    afterMainAction();
-                                    Intent intent = new Intent(context.getApplicationContext(), LoginActivity.class);
-                                    startActivity(intent);
-                                    context.finish();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                afterMainAction();
-                            }
-                        }
+                new AlertDialog.Builder(context)
+                        .setTitle("Logout")
+                        .setMessage("Estas seguro que quieres salir de la aplicacion?")
+                        .setIcon(R.drawable.logout_black)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            afterMainAction();
-                            Toast.makeText(context.getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                logout();
+                            }})
 
+                        .setNegativeButton(android.R.string.no, null).show();
+                break;
+            case R.id.editAccount:
+                Intent intent = new Intent(context.getApplicationContext(), EditAccountActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void logout(){
+        beforeMainAction();
+        String token = sharedPreferences.getString("token", null);
+        if(token != null && !token.isEmpty()){
+            Call<ResponseBody> call = authService.logout("Token token=".concat(token));
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Toast.makeText(context.getApplicationContext(), response.message(), Toast.LENGTH_SHORT).show();
+                    if (response.isSuccessful()) { // .code() == 200
+                        try {
+                            JSONObject responseJson = new JSONObject(new JSONTokener(response.body().string()));
+                            sharedPreferences.edit().clear().commit();
+                            afterMainAction();
+                            Intent intent = new Intent(context.getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                            context.finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        afterMainAction();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    afterMainAction();
+                    Toast.makeText(context.getApplicationContext(), "Something went wrong... Please try later!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public void beforeMainAction(){

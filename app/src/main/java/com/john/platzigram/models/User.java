@@ -22,7 +22,6 @@ public class User {
     private String password;
     @SerializedName("picture")
     private Picture picture;
-//    private File image;
 
     public User(Integer id, String email, String name, String username, String password, Picture picture) {
         this.id = id;
@@ -32,14 +31,6 @@ public class User {
         this.password = password;
         this.picture = picture;
     }
-
-//    public User(String email, String name, String username, String password, File image) {
-//        this.email = email;
-//        this.name = name;
-//        this.username = username;
-//        this.password = password;
-//        this.image = image;
-//    }
 
     public User(String email, String name, String username, String password) {
         this.email = email;
@@ -98,11 +89,4 @@ public class User {
         this.picture = picture;
     }
 
-//    public File getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(File image) {
-//        this.image = image;
-//    }
 }

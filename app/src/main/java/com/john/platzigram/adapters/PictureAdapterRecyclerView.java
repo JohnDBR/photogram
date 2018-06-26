@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.john.platzigram.R;
 import com.john.platzigram.activities.PictureDetailActivity;
 import com.john.platzigram.models.Post;
+import com.john.platzigram.models.PostV;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,11 +31,11 @@ import butterknife.ButterKnife;
 
 public class PictureAdapterRecyclerView extends RecyclerView.Adapter<PictureAdapterRecyclerView.PictureViewHolder> {
 
-    private ArrayList<Post> pictures;
+    private ArrayList<PostV> pictures;
     private int resource;
     private Activity activity;
 
-    public PictureAdapterRecyclerView(ArrayList<Post> pictures, int resource, Activity activity) {
+    public PictureAdapterRecyclerView(ArrayList<PostV> pictures, int resource, Activity activity) {
         this.pictures = pictures;
         this.resource = resource;
         this.activity = activity;
@@ -49,7 +50,7 @@ public class PictureAdapterRecyclerView extends RecyclerView.Adapter<PictureAdap
 
     @Override
     public void onBindViewHolder(@NonNull PictureViewHolder holder, int position) {
-        Post picture = pictures.get(position);
+        PostV picture = pictures.get(position);
         holder.usernameCard.setText(picture.getUsername());
         holder.timeCard.setText(picture.getTime());
         holder.likeNumberCard.setText(picture.getLike_number());

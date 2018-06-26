@@ -33,4 +33,7 @@
     <string name="hint_description">descripcion</string>
     <string name="new_post_button">Publicar</string>
     <string name="tab_logout">Salir</string>
+    <string name="toolbar_tittle_editAccount">Editar Cuenta</string>
+    <string name="edit_account_button">Editar</string>
+    <string name="tab_edit">editar</string>
 </resources>
