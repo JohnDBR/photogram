@@ -1,5 +1,6 @@
 package com.john.platzigram.services;
 
+import com.john.platzigram.models.Post;
 import com.john.platzigram.models.User;
 
 import java.util.List;
@@ -51,4 +52,7 @@ public interface UserService {
 
     @DELETE("/users/{id}")
     Call<User> deleteUser(@Header("Authorization") String token, @Path("id") int id);
+
+    @GET("/users/{user_id}/posts")
+    Call<List<Post>> getAllPosts(@Header("Authorization") String token, @Path("user_id") int id);
 }

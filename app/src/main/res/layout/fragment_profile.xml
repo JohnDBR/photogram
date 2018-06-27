@@ -60,11 +60,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/pictureProfileRecycler"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_my_posts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/pictureProfileRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userProfilePicture"
@@ -83,13 +89,13 @@
         app:targetWidth="@dimen/width_circleImage_toolbar"
         app:targetHeight="@dimen/width_circleImage_toolbar"/>
 
-    <ProgressBar
-        android:id="@+id/progressBar_profile_fragment"
-        android:visibility="gone"
-        android:elevation="@dimen/elevation_circleImage_profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+    <!--<ProgressBar-->
+        <!--android:id="@+id/progressBar_profile_fragment"-->
+        <!--android:visibility="gone"-->
+        <!--android:elevation="@dimen/elevation_circleImage_profile"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"/>-->
 
     <!--THIS TEXTVIEW ISN'T IMPORTANT BECAUSE WE ALREADY HAVE A TEXT VIEW IN THE COLLAPSING BAR LAYOUT-->
     <!--I DON'T DELETE IT BECAUSE IT HAS A COOL ANIMATION-->

@@ -3,12 +3,13 @@ package com.john.platzigram.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by John on 6/18/2018.
  */
 
-public class User {
+public class User implements Serializable {
 
     @SerializedName("id")
     private Integer id;

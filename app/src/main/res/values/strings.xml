@@ -36,4 +36,5 @@
     <string name="toolbar_tittle_editAccount">Editar Cuenta</string>
     <string name="edit_account_button">Editar</string>
     <string name="tab_edit">editar</string>
+    <string name="tab_delete">eliminar</string>
 </resources>

@@ -2,6 +2,7 @@ package com.john.platzigram.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.TextInputEditText;
@@ -25,7 +26,10 @@ import com.john.platzigram.network.RetrofitClientInstance;
 import com.john.platzigram.services.UserService;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URLConnection;
 
 import butterknife.BindString;
@@ -162,6 +166,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 //            lEmail.setErrorTextAppearance(R.style.error_appearance);
 //            lEmail.setErrorEnabled(true);
             lEmail.setError("Email invalido");
+            valid = false;
+        }
+
+        if (imageSelected == null){
+            addError("Seleccione/Tome una foto");
             valid = false;
         }
 
